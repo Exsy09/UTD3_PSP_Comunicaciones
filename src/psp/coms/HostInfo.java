@@ -29,7 +29,7 @@ public class HostInfo {
                 System.out.println("Nombre de la interfaz: " + ni.getName());
                 System.out.println("Interfaz activa: " + ni.isUp());
                 System.out.println("MAC adress: " + Arrays.toString(ni.getHardwareAddress()));
-
+                // recorremos todas las IPs
                 Enumeration<InetAddress> direcciones = ni.getInetAddresses();
                 // recorremos el enumeration
                 while (direcciones.hasMoreElements()){
