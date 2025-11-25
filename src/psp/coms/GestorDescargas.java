@@ -6,44 +6,50 @@ import java.net.URL;
 
 public class GestorDescargas {
 
-    public void descargarArchivos(String url_descarga, String nombreFichero){
-        System.out.println("Descargando..." + url_descarga);
+    InputStream inputStream  ;
+    InputStreamReader inputStreamReader;
+    BufferedReader bufferedReader;
+    FileWriter escritor;
 
-        try{
-            URL url = new URL(url_descarga);
-            InputStream is = url.openStream();
-            InputStreamReader reader = new InputStreamReader();
-            BufferedReader bReader = new BufferedReader(new InputStreamReader(is));
-            FileWriter escritorFichero = new FileWriter(nombreFichero);
+    public void descargarArchivo(String urlDescargar, String nombreFichero){
+        System.out.println("Descargando: " + urlDescargar + "...");
+
+        try {
+            URL url = new URL(urlDescargar);
+
+            inputStream = url.openStream(); //Esto va a leer byte a byte
+            inputStreamReader = new InputStreamReader(inputStream); //Este va a leer linea por linea
+            bufferedReader = new BufferedReader(inputStreamReader);
+
+            escritor = new FileWriter(nombreFichero);
 
             String linea;
-            while (linea = bReader.readLine()) != null) {
-                escritorFichero.write(linea);
+            while ((linea = bufferedReader.readLine()) != null ){
+                escritor.write(linea + "\n");
             }
-            escritorFichero.close();
-            bReader.close();
-            is.close();
 
-        } catch (MalformedURLException e){
+        } catch (MalformedURLException e) {
             throw new RuntimeException(e);
-        } catch (IOException e){
+        } catch (IOException e) {
             throw new RuntimeException(e);
         } finally {
             try {
-                escritorFichero.close();
-                bReader.close();
-                is.close();
-            } catch (IOException e){
+                escritor.close();
+                bufferedReader.close();
+                inputStreamReader.close();
+            } catch (IOException e) {
                 throw new RuntimeException(e);
             }
-
-        }
         }
 
-        public static void main(String[] args){
-            GestorDescargas gd = new GestorDescargas();
-            String url = "https://www.bbc.com/robots.txt";
-            gd.descargarArchivos(url, "descarga.txt");
-        }
 
+    }
+
+    public static void main(String[] args) {
+        GestorDescargas gestorDescargas = new GestorDescargas();
+
+        String url = "https://www.bbc.com/robots.txt";
+
+        gestorDescargas.descargarArchivo(url, "descarga.txt");
+    }
 }
